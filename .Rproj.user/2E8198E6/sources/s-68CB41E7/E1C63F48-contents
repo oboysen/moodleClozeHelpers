@@ -1,0 +1,95 @@
+---
+title: "Easy Creation of Individualized All-in-One Quizzes for Moodle -- And a Statistics Classroom Experiment"
+author: "Ole Boysen"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Easy Creation of Individualized All-in-One Quizzes for Moodle -- And a Statistics Classroom Experiment}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+
+How to get undergraduate students with an aversion against numbers and equations to engage in a statistics and econometrics module?
+From past experience, it was clear that the students would not attend and not engage without assessments.
+Without assistance, weekly manually graded assessments seemed out of question in all but small classes.
+So could automatically graded online quizzes resolve this dilemma?
+
+The envisaged approach was the following: In the labs, students need to work through a problem set analysing a single data set using R. If this is a graded assessment but students should still talk to and learn from each other, simple copying should not be possible. Thus, questions need to be varied and randomised. 
+Usually, Learning  Management Systems (LMS) randomise the answer options of MCQs within a subquestion but do not allow to randomise subquestions which all are linked by the use of the same data set. 
+The Moodle LMS facilitates this in the question type "embedded answers" aka "cloze".  A cloze questions is basically a single web page where single and multiple choice, numeric and string fill-in-the-blanks questions can be combined. 
+
+The students work in RStudio Cloud so that they can work in the lab room as well as at home and the instructor has full control over the environment regarding package availability and versions. The students follow the instructions and questions in the Moodle cloze quiz, analyse the data set in R and then enter and submit some results again in Moodle.
+
+Each student works on an individually randomised data set and questions randomly modified or randomised by sampling, differing in answer options, numbers, coefficients, cases, etc. 
+Moodle offers various modes in running these quizzes including a mode where students can check the correctness of their answers with direct, immediate feedback and the option to retry with or without penalty. 
+
+Initially, I imagined that having the option to verify the own work and to retry without being penalty would be extremely motivating to work until understood. The deadline for the short sets of questions was even set until midnight to take out the time pressure. 
+
+However, this only worked for the shortest while before students put all their efforts into finding out how to imitate what some other student did to finish earlier without any interest in what was actually done or the result meant. The students got more interested in the topic once the quizzes did not allow the immediate checking any more and they would only find out if their result was right or wrong after the deadline had passed. If I do this again, I will directly start with the latter approach which -- in a randomised setting -- also is more suited to asking more simple questions, such as yes or no or simple single choice questions. 
+
+But in general, the automated grading approach obviously has the drawback of needing rather simple questions which can be answered in a single number or word. Thus, in the end the questions need to be complemented with additional, more exam-style text questions which then require manual grading. However, if no immediate feedback is required, one or two subquestions like this might also be easily doable per week.
+
+The following just exemplifies each Moodle cloze subquestion type in a fictitious example quiz to illustrate creating an exam using the `moodleClozeHelpers` and `exams` packages. The `moodleClozeHelpers` package aims exclusively at streamlining writing **cloze** exams and reducing the error-proneness of the process.
+
+# Writing the Quiz
+
+An example quiz written in *rmarkdown*  (Rmd) is provided in the file retrieved using the command `system.file('examples',package='moodleClozeHelpers','cloze_quiz_example.Rmd')`
+
+First, participants follow the instructions at the top to set up by loading packages, the data and resampling their individualised data set using a provided random seed. The random seed is different for each participant and facilitates that the instructor can reconstruct the data set and results if necessary.
+
+Then, the tasks are described together with questions to be answered accompanied by input fields for the answers.
+
+The main user functions of the `moodleClozeHelpers` package are:
+
+- `new_clozeL()`: Creates a new container for the subquestions.
+- `add_num()`, `add_string()`, `add_schoice()`, `add_mchoice()`: Adds a question asking for a number, a string, a single choice and multiple choices between multiple answer options, respectively.
+- `print_answerlist()`: This list is required by Moodle whenever MCQs are involved. Best to leave this command in the Rmd file where it is.
+- `print_metainfo()`: This extracts from each subquestion the type of question, points, answer options etc. Best to leave this command in the Rmd file where it is.
+
+The subquestions are all collected in a list in a `clozeL` object and the order is important. Corresponding to that order, the boxes for entering the answers are positioned or referenced in the quiz document using `\#\#ANSWERX\#\#` where the X is replaced with the order number of that question in the list.
+
+Basic standard rmarkdown can be used for formatting the text.
+
+The last two commands `print_answerlist()` and `print_metainfo()` need to end the document in an `r` chunk.
+
+# Converting the Rmd to a Moodle XML file using the `exams` package
+
+As `moodleClozeHelpers` supports some Moodle cloze functionality which is not supported by the current CRAN `exams` package version 2.3-4, the two functions `exams2moodle()` and `read_metainfo()` are overwritten with slightly patched versions. This might break with future versions of the exams package. 
+
+Most importantly, this allows in cloze questions for alternative answer options and corresponding point fractions in numeric and string subquestions in Moodle as well as for multiple choice questions with a set of correct answers instead of only one.
+
+To convert the example quiz:
+
+1. Open the example quiz .Rmd file using
+    `file.edit(system.file('examples',package='moodleClozeHelpers','cloze_quiz_example.Rmd'))`
+2. Save it to your working directory.
+3. Execute the following lines to convert the "cloze_quiz_example.Rmd" file to the Moodle XML file "cloze_quiz_example.xml" in your working directory.
+    ```{r setup, echo=T, eval=F}
+    library('exams')
+    library('moodleClozeHelpers')
+    # provisionally patch the exams package's functions
+    source(system.file('examples',package='moodleClozeHelpers','read_metainfo_mod.R'))
+    source(system.file('examples',package='moodleClozeHelpers','exams2moodle_mod.R'))
+    assignInNamespace("exams2moodle",exams2moodle,ns="exams")
+    assignInNamespace("read_metainfo",read_metainfo,ns="exams")
+    # set a random seed to control reproducibiliy of the quizzes
+    set.seed(6550)
+    # convert Rmd to xml
+    exams2moodle('cloze_quiz_example.Rmd', n=1, name='cloze_quiz_example', verbose=F)
+    ```
+4. The file "cloze_quiz_example.xml" can now be directly imported from within Moodle as Moodle XML format.
+
+# Results
+
+Did it work? Somewhat. I had the impression that students engaged a bit more and a somewhat higher end level in the end than the year before. 
+
+Nevertheless in retrospect, the automatic grading needs supplementing with some few deeper, more exam-like interpretation questions from the beginning. How the undergraduate education system currently works -- at least at my university -- it seems asked too much to expect undergraduate students to show intellectual curiousity. Everything in their studies has been very strictly programmed. The only incentive that really works is assessment, unfortunately. And assessment is time consuming without the intellectual rewards of more open exploration and analysis of data.

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+
+
+<question type="category">
+<category>
+<text>$course$/cloze_quiz_example/Exercise 1</text>
+</category>
+</question>
+
+
+<question type="cloze">
+<name>
+<text> Q1 : cloze_quiz_example </text>
+</name>
+<questiontext format="html">
+<text><![CDATA[<p>
+<h2 id="setup-instructions">Setup instructions</h2>
+<ul>
+<li>Execute the following lines</li>
+<li>Then answer all question below using the data set <code>cps</code>!</li>
+</ul>
+<pre><code>library(AER)
+set.seed(6916)
+data(&#39;CPS1985&#39;)
+cps &lt;- CPS1985[sample(1:nrow(CPS1985), 150, TRUE),]</code></pre>
+<h2 id="questions">Questions</h2>
+<p><strong>In MCQs, mark the answer choice that best completes the statement, answers the question or is closest to the precise answer.</strong></p>
+<h1 id="descriptive-statistics">1. Descriptive statistics</h1>
+<p>Males have more years of education than females on average in which of the following occupations? {2:MULTIRESPONSE_H:%-33%worker~%33%technical~%-33%services~%-33%office~%33%sales~%33%management}</p>
+<h1 id="regression">2. Regression</h1>
+<p>Estimate a regression model <code>m1</code> where logarithm of the hourly US$ <code>wage</code> dependents on <code>age</code> and <code>gender</code>.<br />
+Use the results to answer the following questions.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Test the hypothesis that both slope coefficients are equal to zero versus the alternative that at least one is not. Provide the corresponding <span class="math inline">\(p\)</span>-value with <em>all</em> decimal places as inferred from the regression <code>summary</code>.  {2:NUMERICAL:%100%0.000155437775579438:1e-05~%10%0.000155437775579438:0.01}</p></li>
+<li><p>The coefficient of <code>age</code> is {1:MULTICHOICE:%0%statistically significant at the 0.1% level.~%0%statistically significant at the 1% level.~%0%statistically significant at the 5% level.~%0%statistically significant at the 10% level.~%100%not statistically significant.}</p></li>
+<li><p>How much does the wage of females differ from that of males if they are of the same age? {1:MULTICHOICE:%0%-32.029 %~%0%-0.003 $~%0%0.017 $~%0%-0.325 $~%0%-32.029 $~%0%1.692 $~%0%-32.533 $~%0%0.017 %~%0%1.692 %~%0%-0.32 %~%100%-32.533 %~%0%169.165 %~%0%-0.003 %~%0%-0.325 %~%0%169.165 $~%0%-0.32 $~%0%-0.003 $~%0%-0.003 %}</p></li>
+<li><p>If the variance of <span class="math inline">\(u_i\)</span> conditional on age and gender is constant, the regression error term is called  {2:SHORTANSWER:%100%homoskedastic~%100%homoscedastic~%50%homoskedasticity~%50%homoscedasticity~%100%homoskedastic~%100%homoscedastic~%50%homoskedasticity~%50%homoscedasticity}</p></li>
+</ol>
+</p>]]></text>
+</questiontext>
+<penalty>0</penalty>
+<defaultgrade>8</defaultgrade>
+</question>
+
+</quiz>

@@ -1,0 +1,92 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+Question
+========
+  
+```{r setup, include=FALSE}
+  # chunk defaults
+  knitr::opts_chunk$set(echo = FALSE, eval=TRUE, results='hide', fig.show ='hide', comment=NA, message=FALSE)
+  seed1 <- sample(1:9999,1)
+```
+
+## Setup instructions
+
+- Execute the following lines
+- Then answer all question below using the data set `cps`!
+
+```{ }
+library(AER)
+set.seed(`r seed1`)
+data('CPS1985')
+cps <- CPS1985[sample(1:nrow(CPS1985), 150, TRUE),]
+```
+
+
+## Questions
+
+```{r}
+library(AER)
+set.seed(seed1)
+data('CPS1985')
+cps <- CPS1985[sample(1:nrow(CPS1985), 150, TRUE),]
+cl <- new_clozeL('Cloze Quiz Example')
+```
+
+**In MCQs, mark the answer choice that best completes the statement, answers the question or is closest to the precise answer.**  
+
+# 1. Descriptive statistics
+
+Males have more years of education than females on average in which of the following occupations? \#\#ANSWER1\#\#
+```{r}
+w <- tapply(cps$education, list(cps$gender, cps$occupation), FUN=mean)
+opts <- colnames(w)
+corrno <- which(w[1,]>w[2,])
+cl <- add_mchoice(cl, options=opts, correctno=corrno, shuffle=FALSE, points=2, display='horizontal')
+```
+
+# 2. Regression
+
+Estimate a regression model `m1` where logarithm of the hourly US$ `wage` dependents on `age` and `gender`.  
+Use the results to answer the following questions.
+
+a.  Test the hypothesis that both slope coefficients are equal to zero versus the alternative that at least one is not. Provide the corresponding $p$-value with *all* decimal places as inferred from the regression `summary`. \#\#ANSWER2\#\#
+    ```{r}
+    m1 <- lm(log(wage) ~ age + gender, data=cps)    
+    fstat <- summary(m1)$fstatistic 
+    pval <- pf(fstat[1],fstat[2],fstat[3],lower.tail=FALSE)
+    cl <- add_num(cl, ans=c(pval,pval), tol=c(0.00001,0.01), points=2, pointfrac=c(100,10))
+    ```
+b.  The coefficient of `age` is \#\#ANSWER3\#\#
+    ```{r}
+    opts <- c('statistically significant at the 0.1% level.', 'statistically significant at the 1% level.', 'statistically significant at the 5% level.', 'statistically significant at the 10% level.', 'not statistically significant.')
+    pans <- c(0.001, 0.01, 0.05, 0.1, 1)
+    pval <- summary(m1)$coefficients['age','Pr(>|t|)']
+    corrno <- which(pval <= pans)[1]
+    cl <- add_schoice(cl, options=opts, correctno=corrno, shuffle=F, points=1)
+    ```
+c.  How much does the wage of females differ from that of males if they are of the same age? \#\#ANSWER4\#\#
+    ```{r}
+    cf <- coef(m1)
+    cf_int <- cf['(Intercept)']
+    cf_age <- cf['age']
+    cf_gender <- cf['genderfemale']
+    opts <- c(cf_gender, cf_age+cf_gender, cf_int+cf_age+cf_gender)
+    opts <- paste0( rep( stdround(c(opts, opts*100, opts/100),3), each=2) , c(' $',' %'))
+    corrno <- which(opts==paste0(stdround(cf_gender*100, 3), ' %'))
+    cl <- add_schoice(cl, options=opts, correctno=corrno, shuffle=TRUE, points=1)
+    ```
+d.  If the variance of $u_i$ conditional on age and gender is constant, the regression error term is called \#\#ANSWER5\#\#
+    ```{r}
+    # if the answer in num or string questions is given as a vector, the are interpreted as alternative answer options which might give differing fractions of the maximum points possible
+    ans <- c('homoskedastic','homoscedastic','homoskedasticity','homoscedasticity')
+    cl <- add_string(cl, answer=ans, points=2, pointfrac=c(100,100,50,50))
+    ```
+
+```{r, results='asis'}
+  print_answerlist(cl)
+  print_metainfo(cl)
+```
