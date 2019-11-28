@@ -25,7 +25,8 @@ Add a fill-in-a-string question (exams package: "string", Moodle: "SHORTANSWER")
 data('mtcars')
 cl <- new_clozeL('Car quiz')
 # Question: Which of the cars has the most horsepower?
-add_string(cl, answer=c('Maserati Bora','Camaro Z28','Duster 360'), points=2, pointfrac=c(100,50,50))
+add_string(cl, answer=c('Maserati Bora','Camaro Z28','Duster 360'), points=2,
+pointfrac=c(100,50,50))
 }
 \seealso{
 \code{\link{clozeQ}}

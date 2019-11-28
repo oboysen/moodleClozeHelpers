@@ -5,15 +5,15 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "0",
+    "hash" : "1522410921",
     "id" : "2DD47552",
-    "lastKnownWriteTime" : 1574809588,
-    "last_content_update" : 1574809588258,
+    "lastKnownWriteTime" : 1574974968,
+    "last_content_update" : 1574974968611,
     "path" : "X:/s-drive/teaching/UCD/SEM_2019_20/R/moodleClozeHelpers/R/moodleClozeHelpers.R",
     "project_path" : "R/moodleClozeHelpers.R",
     "properties" : {
-        "cursorPosition" : "97,71",
-        "scrollLine" : "0"
+        "cursorPosition" : "274,16",
+        "scrollLine" : "253"
     },
     "read_only" : false,
     "read_only_alternatives" : [

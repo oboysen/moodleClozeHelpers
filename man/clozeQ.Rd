@@ -22,6 +22,10 @@ clozeQ(answer, type = "num", points = 1, pointfrac = 100,
 \item{mcq_options}{MCQ answer options provided as a character vector.}
 
 \item{mcq_correctno}{Number indicating the correct MCQ answer option.}
+
+\item{mcq_shuffle}{Shuffle multiple or single choice answer options randomly.}
+
+\item{mchoice_display}{In multiple choice questions (not single choice!), the arrangement of the tick boxes, a string "vertical" or "horizontal".}
 }
 \value{
 returns a \code{clozeQ} question object.

@@ -14,6 +14,8 @@ add_schoice(cl, options, correctno, points = 1, shuffle = FALSE)
 \item{correctno}{A single numerical, indicates the correct MCQ answer option.}
 
 \item{points}{Numerical, the maximum points for this question.}
+
+\item{shuffle}{Shuffle answer options randomly.}
 }
 \value{
 returns a \code{clozeL} question container object with the schoice question added.

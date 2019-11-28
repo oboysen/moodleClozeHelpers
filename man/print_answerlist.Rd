@@ -16,6 +16,6 @@ Print the MCQ answerlist from the clozeL object as rmarkdown into the exam. Empt
 data('mtcars')
 cl <- new_clozeL('Car quiz')
 # Question: How many cylinders does a Datsun 710 have?
-add_schoice(cl, options=sort(unique(mtcars$cyl)), correctno=1, points=1, shuffle=FALSE)
-print_answerlist()
+cl <- add_schoice(cl, options=sort(unique(mtcars$cyl)), correctno=1, points=1, shuffle=FALSE)
+print_answerlist(cl)
 }

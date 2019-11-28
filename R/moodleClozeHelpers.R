@@ -10,6 +10,8 @@
 #' @param tol tolerance for numerical questions.
 #' @param mcq_options MCQ answer options provided as a character vector.
 #' @param mcq_correctno Number indicating the correct MCQ answer option.
+#' @param mcq_shuffle Shuffle multiple or single choice answer options randomly.
+#' @param mchoice_display In multiple choice questions (not single choice!), the arrangement of the tick boxes, a string "vertical" or "horizontal".
 #'
 #' @return returns a \code{clozeQ} question object.
 #' @export
@@ -44,7 +46,6 @@ clozeQ <- function(answer, type='num', points=1, pointfrac=100, tol=0.001, mcq_o
 #'
 #' @return returns a \code{clozeL} question container object.
 #'
-#' @examples clozeL('Quiz 1')
 clozeL <- function(name) {
   obj <- list()
   attr(obj, 'class') <- 'clozeL'
@@ -72,6 +73,7 @@ new_clozeL <- function(name) {
 #' @param options MCQ answer options provided as a character vector.
 #' @param correctno A single numerical, indicates the correct MCQ answer option.
 #' @param points Numerical, the maximum points for this question.
+#' @param shuffle Shuffle answer options randomly.
 #'
 #' @return returns a \code{clozeL} question container object with the schoice question added.
 #' @export
@@ -97,6 +99,7 @@ add_schoice <- function(cl, options, correctno, points=1, shuffle=FALSE) {
 #' @param pointfrac A numeric vector of point fractions given for each answer option. If not provided, fractions will be calculated such that all correct answers.
 #' together weight 100\% and all incorrect answer together weight -100\%. Note that Moodle does not allow any decimal places for the point fractions here (found out by testing).
 #' @param points Maximum points for this question.
+#' @param shuffle Shuffle answer options randomly.
 #' @param display The arrangement of the tick boxes, a string "vertical" or "horizontal".
 #'
 #' @return returns a \code{clozeL} question container object with the schoice question added.
@@ -166,7 +169,8 @@ add_num <- function(cl, answer, points=1, pointfrac=100, tol=0.001) {
 #' data('mtcars')
 #' cl <- new_clozeL('Car quiz')
 #' # Question: Which of the cars has the most horsepower?
-#' add_string(cl, answer=c('Maserati Bora','Camaro Z28','Duster 360'), points=2, pointfrac=c(100,50,50))
+#' add_string(cl, answer=c('Maserati Bora','Camaro Z28','Duster 360'), points=2,
+#' pointfrac=c(100,50,50))
 #' @seealso \code{\link{clozeQ}}
 add_string <- function(cl, answer, points=1, pointfrac=100) {
   add_clozeQ(cl, type='string', answer=answer, points=points, pointfrac=pointfrac)
@@ -200,8 +204,8 @@ add_clozeQ <- function(cl, ...) {
 #' data('mtcars')
 #' cl <- new_clozeL('Car quiz')
 #' # Question: How many cylinders does a Datsun 710 have?
-#' add_schoice(cl, options=sort(unique(mtcars$cyl)), correctno=1, points=1, shuffle=FALSE)
-#' print_answerlist()
+#' cl <- add_schoice(cl, options=sort(unique(mtcars$cyl)), correctno=1, points=1, shuffle=FALSE)
+#' print_answerlist(cl)
 print_answerlist <- function(cl) {
   answerlist <- function(...) {
     writeLines(c("Answerlist", "----------",paste("*", do.call("paste", list(...,sep = '. '))),'*  '))
@@ -211,7 +215,7 @@ print_answerlist <- function(cl) {
 
 #' extract_element
 #' @description Extract one element from all questions contained in the clozeL container object.
-#' @param cl clozeL container object
+#' @param cl clozeL question container object
 #' @param elname character with the name of the element to extract from each clozeQ object (e.g. \code{points})
 #'
 #' @return returns a vector which collects element \code{elname} from all \code{clozeQ} contained in \code{clozeL}.
@@ -222,7 +226,7 @@ extract_element <- function(cl, elname) {
 
 #' print_metainfo
 #' @description Collect and print as markdown all meta-information from a clozeL object.
-#' @param cl
+#' @param cl clozeL question container object
 #'
 #' @export
 #'
@@ -230,8 +234,8 @@ extract_element <- function(cl, elname) {
 #' data('mtcars')
 #' cl <- new_clozeL('Car quiz')
 #' # Question: How many cylinders does a Datsun 710 have?
-#' add_schoice(cl, options=sort(unique(mtcars$cyl)), correctno=1, points=1, shuffle=FALSE)
-#' print_metainfo()
+#' cl <- add_schoice(cl, options=sort(unique(mtcars$cyl)), correctno=1, points=1, shuffle=FALSE)
+#' print_metainfo(cl)
 print_metainfo <- function(cl) {
   writeLines(c("Meta-information", "================",
                paste0("exname: ",attr(cl, 'Qname')),
@@ -268,13 +272,14 @@ stdround <- function(x,digits=3){
 #'
 #' @return Latex string.
 #' @export
+#' @import stats
 #'
 #' @examples
 #' data('mtcars')
 #' m <- lm(mpg ~ disp + wt, data=mtcars)
 #' write_regression_equation(m)
 write_regression_equation <- function(reg, digits=3) {
-  cfs <- stdround(coef(reg), digits=digits)
+  cfs <- stdround(coefficients(reg), digits=digits)
   paste0('\\widehat{', names(attr(reg$terms, 'dataClasses')[1]), '}=',
          paste0(paste0(cfs[1], paste0(cfs[-1], '\\times ', names(cfs[-1]), collapse='')),
                 collapse=ifelse(cfs[-1]>=0,'+','')), collapse='')

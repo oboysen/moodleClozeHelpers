@@ -7,7 +7,7 @@
 extract_element(cl, elname)
 }
 \arguments{
-\item{cl}{clozeL container object}
+\item{cl}{clozeL question container object}
 
 \item{elname}{character with the name of the element to extract from each clozeQ object (e.g. \code{points})}
 }

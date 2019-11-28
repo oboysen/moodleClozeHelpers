@@ -19,6 +19,8 @@ together weight 100\% and all incorrect answer together weight -100\%. Note that
 
 \item{points}{Maximum points for this question.}
 
+\item{shuffle}{Shuffle answer options randomly.}
+
 \item{display}{The arrangement of the tick boxes, a string "vertical" or "horizontal".}
 }
 \value{

@@ -15,6 +15,3 @@ returns a \code{clozeL} question container object.
 \description{
 Create a \code{clozeL} container object to store the partial question \code{clozeQ} object for a cloze question
 }
-\examples{
-clozeL('Quiz 1')
-}
