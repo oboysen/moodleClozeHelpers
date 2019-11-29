@@ -1,5 +1,14 @@
 # moodleClozeHelpers
 
+## Installation
+
+Install directly from GitHub:
+
+```
+library(devtools)
+install_github('oboysen/moodleClozeHelpers', build_vignettes = T)
+```
+
 ## Easy creation of Moodle Cloze quizzes using R
 
 The *moodleClozeHelpers* package is an add-on for the *exams* package to simplify and decrease the error-proneness of 
