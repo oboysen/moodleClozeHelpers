@@ -9,7 +9,7 @@ library(devtools)
 install_github('oboysen/moodleClozeHelpers', build_vignettes = T)
 ```
 
-## Easy creation of Moodle Cloze quizzes using R
+## Easy creation of Moodle Cloze quizzes using R/exams
 
 The *moodleClozeHelpers* package is an add-on for the *exams* package to simplify and decrease the error-proneness of 
 the process of creating "Embedded Answers" aka "Cloze" quizzes which can be imported to the Moodle Learning Management System.
