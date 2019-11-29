@@ -1,10 +1,10 @@
 ---
-title: "Easy Creation of Individualized All-in-One Quizzes for Moodle -- And a Statistics Classroom Experiment"
+title: "Easy Creation of Individualized All-in-One Quizzes for Moodle using R/exams -- And a Statistics Classroom Experiment"
 author: "Ole Boysen"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Easy Creation of Individualized All-in-One Quizzes for Moodle -- And a Statistics Classroom Experiment}
+  %\VignetteIndexEntry{Easy Creation of Individualized All-in-One Quizzes for Moodle using R/exams -- And a Statistics Classroom Experiment}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -67,7 +67,7 @@ As `moodleClozeHelpers` supports some Moodle cloze functionality which is not su
 
 Most importantly, this allows in cloze questions for alternative answer options and corresponding point fractions in numeric and string subquestions in Moodle as well as for multiple choice questions with a set of correct answers instead of only one.
 
-To convert the example quiz:
+To convert the example rmarkdown quiz to a Moodle XML file:
 
 1. Open the example quiz .Rmd file using
     `file.edit(system.file('examples',package='moodleClozeHelpers','cloze_quiz_example.Rmd'))`
