@@ -5,7 +5,7 @@
 The *moodleClozeHelpers* package is an add-on for the *exams* package to simplify and decrease the error-proneness of 
 the process of creating "Embedded Answers" aka "Cloze" quizzes which can be imported to the Moodle Learning Management System.
 
-A fictitious example rmarkdown quiz file can be retrieved using  
+A file with a fictitious example can be retrieved using  
 `system.file('examples',package='moodleClozeHelpers','cloze_quiz_example.Rmd')`
 
 The main user functions of the `moodleClozeHelpers` package are:
